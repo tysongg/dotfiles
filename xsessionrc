@@ -1,0 +1,5 @@
+# Setup background
+. $HOME/.fehbg
+
+# Start picom compositor
+picom -cC &
