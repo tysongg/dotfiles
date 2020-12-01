@@ -1,0 +1,35 @@
+: ${DOTFILES_DIR=$( dirname $(dirname "$( pwd )"))}
+echo "Current DOTFILES_DIR: $DOTFILES_DIR"
+
+handle_file() {
+    TEMP_DIR=$1
+    IGNORE_FILE=$2
+
+    echo "Moving ignored file $IGNORE_FILE to $TEMP_DIR"
+    mv "$IGNORE_FILE" "$TEMP_DIR/$( basename $IGNORE_FILE )"
+}
+
+mkdir "${DOTFILES_DIR}/.tmp"
+
+declare -a  IGNORE_PATTERNS
+
+if [ -f "${DOTFILES_DIR}/.rcignore" ]; then
+    echo "${DOTFILES_DIR}/.rcignore found"
+
+    exec 4<$DOTFILES_DIR/.rcignore
+    while read -u4 pattern || [[ -n $pattern ]]; do
+        IGNORE_PATTERNS+=($pattern)
+        echo "Found Pattern ${pattern}"
+    done
+else
+    echo "${DOTFILES_DIR}/.rcignore does not exist"
+fi
+
+echo "Ignored Patterns: ${IGNORE_PATTERNS}"
+
+for pattern in ${IGNORE_PATTERNS[@]}; do
+    echo "Searching Pattern ${pattern} in ${DOTFILES_DIR}"
+    find ${DOTFILES_DIR} -type f -iname $pattern | while read -d $'\0' file || [[ -n $file ]]; do
+        handle_file "${DOTFILES_DIR}/.tmp" $file
+    done
+done

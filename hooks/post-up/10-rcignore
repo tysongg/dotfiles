@@ -1,0 +1,15 @@
+: ${DOTFILES_DIR=$( dirname $(dirname "$( pwd )"))}
+echo "Current DOTFILES_DIR: $DOTFILES_DIR"
+
+handle_file() {
+    IGNORE_FILE=$1
+
+    echo "Restoring file $IGNORE_FILE"
+    mv "$IGNORE_FILE" "${DOTFILES_DIR}/$( basename $IGNORE_FILE )"
+}
+
+find ${DOTFILES_DIR}/.tmp -maxdepth 1 -type f | while read -d $'\0' file || [[ -n $file ]]; do
+    handle_file $file
+done
+
+rm -rf $DOTFILES_DIR/.tmp/``
