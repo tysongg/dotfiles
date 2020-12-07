@@ -6,15 +6,18 @@
     "geometry": {
        "height": 995,
        "width": 940,
-       "x": 30,
+       "x": 970,
        "y": 30
     },
     "marks": [],
-    "name": "#general - Discord",
+    "name": "Discord",
     "percent": 0.5,
     "swallows": [
        {
-        "class": "^discord$"
+        "class": "^discord$",
+        "instance": "^discord$",
+        "title": "^Discord$",
+        "window_role": "^browser\\-window$"
        }
     ],
     "type": "con"
